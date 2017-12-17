@@ -1,0 +1,7 @@
+D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Debug\MiniJavaCompiller.exe.config
+D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Debug\MiniJavaCompiller.exe
+D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Debug\MiniJavaCompiller.pdb
+D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Debug\Compiller.csprojResolveAssemblyReference.cache
+D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Debug\Compiller.csproj.CoreCompileInputs.cache
+D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Debug\MiniJavaCompiller.exe
+D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Debug\MiniJavaCompiller.pdb
