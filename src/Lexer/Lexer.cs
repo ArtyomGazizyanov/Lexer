@@ -106,7 +106,7 @@ namespace Compiler.LexicalAnalyzer
 		private Token _peek;
 	    private string _substringPart;
 
-        private bool IsEof => Reader.EndOfStream;
+        private bool IsEof => Reader.EndOfStream && _bufferText.Length > 0 && IsEoln;
 
 		private bool IsEoln => _caretPos == _bufferText.Length;
 
