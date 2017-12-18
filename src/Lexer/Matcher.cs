@@ -6,19 +6,11 @@ namespace MiniJavaCompiller.Lexer
 {
     class Matcher
 	{
-        private static readonly List<char> _operatorsList =
-            new List<char> { '&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.' };
+	    public static List<char> OperatorsList { get; } = new List<char> { '&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.' };
+	    public static List<char> SeporatorsList { get; } = OperatorsList;
+	    public static List<char> ValidIdentifierSymbols { get; } = new List<char> { '_', '-' };
 
-        private static readonly List<char> _seporatorsList = OperatorsList;
-
-        private static readonly List<char> _validIdentifierSymbols =
-            new List<char> { '_', '-' };
-
-        public static List<char> OperatorsList { get => _operatorsList; }
-        public static List<char> SeporatorsList { get => _seporatorsList;  }
-        public static List<char> ValidIdentifierSymbols { get => _validIdentifierSymbols; }
-
-        public static bool IsSeporator( char symbol )
+	    public static bool IsSeporator( char symbol )
 		{
 			return SeporatorsList.Contains( symbol );
 		}

@@ -3,9 +3,9 @@ using System;
 
 namespace Compiler.SyntaxAnalyzer
 {
-	public class Syntaxer
+	public class SyntaxHelper
 	{
-		public Syntaxer(Lexer lexer)
+		public SyntaxHelper(Lexer lexer)
 		{
 			_lexer = lexer;
 

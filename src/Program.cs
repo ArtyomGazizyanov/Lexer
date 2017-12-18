@@ -21,7 +21,7 @@ namespace Compiler
 				StreamReader reader = new StreamReader(args[0]);
 				Lexer lexer = new Lexer(reader);
 
-				Syntaxer syntaxer = new Syntaxer(lexer);
+			    SyntaxHelper syntaxer = new SyntaxHelper(lexer);
 			}
 			catch (Exception ex)
 			{
