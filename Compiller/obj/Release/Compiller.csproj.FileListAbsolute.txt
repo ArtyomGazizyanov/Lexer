@@ -1,6 +1,0 @@
-D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Release\MiniJavaCompiller.exe.config
-D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Release\MiniJavaCompiller.exe
-D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Release\MiniJavaCompiller.pdb
-D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Release\Compiller.csproj.CoreCompileInputs.cache
-D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Release\MiniJavaCompiller.exe
-D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Release\MiniJavaCompiller.pdb
