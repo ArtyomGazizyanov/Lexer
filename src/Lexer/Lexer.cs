@@ -109,8 +109,30 @@ namespace Compiler.LexicalAnalyzer
         private bool IsEof => Reader.EndOfStream;
 
 		private bool IsEoln => _caretPos == _bufferText.Length;
-		
-		private void SkipWhitespaces()
+
+	    private string GetSubstringFromText
+	    {
+	        get
+	        {
+	            int jumpTospaceOrEnd = 0;
+	            foreach (char symbol in _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos))
+	            {
+	                if (!Char.IsSeparator(symbol) && !Matcher.SeporatorsList.Contains(symbol))
+	                {
+	                    ++jumpTospaceOrEnd;
+	                }
+	                else
+	                {
+	                    return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
+	                }
+
+	            }
+
+	            return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
+	        }
+	    }
+
+        private void SkipWhitespaces()
 		{
 			while (!IsEof && !IsEoln)
 			{
@@ -135,28 +157,6 @@ namespace Compiler.LexicalAnalyzer
 		private void UpdateCarretPos( int jump )
 		{
 			_caretPos += jump;
-		}
-
-		private string GetSubstringFromText
-		{
-			get
-			{
-				int jumpTospaceOrEnd = 0;
-				foreach ( char symbol in _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos))
-				{
-					if ( !Char.IsSeparator( symbol ) && !Matcher.SeporatorsList.Contains(symbol))
-					{
-						++jumpTospaceOrEnd;
-					}
-					else
-					{
-						return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
-					}
-					
-				}
-
-				return jumpTospaceOrEnd == 0 ? _bufferText.Substring( _caretPos, 1 ) : _bufferText.Substring( _caretPos, jumpTospaceOrEnd );
-			}
 		}
 	}
 }
