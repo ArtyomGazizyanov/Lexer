@@ -1,3 +1,9 @@
+Usage
+Compiller.exe <inputFile>
+Example: Compiller.exe input.txt
+Example: Compiller.exe input.txt > out.txt
+
+
 Main               ::= MainClass ( ClassDeclaration )* EOF
 
 MainClass           ::= "class" Identifier "{" "public" "static" "void" "main" "(" "string" "[" "]" Identifier ")" "{" Statement "}" "}"
