@@ -11,7 +11,6 @@ namespace Compiler.LexicalAnalyzer
 		Number,
 		Operator,
 		Eof,
-		Eoln,
 		Undefined,
 	}
 
@@ -115,13 +114,11 @@ namespace Compiler.LexicalAnalyzer
 		{
 			while (!IsEof && !IsEoln)
 			{
-				if (Char.IsWhiteSpace(_bufferText[_caretPos]) || Char.IsSeparator(_bufferText[_caretPos]))
+				if (Char.IsWhiteSpace(_bufferText[_caretPos]) 
+                    || Char.IsSeparator(_bufferText[_caretPos])
+                    || Matcher.CheckComment(_bufferText[_caretPos]))
 				{
 					++_caretPos;
-					continue;
-				}
-				if (Matcher.CheckComment(_bufferText[_caretPos]))
-				{
 					continue;
 				}
 
