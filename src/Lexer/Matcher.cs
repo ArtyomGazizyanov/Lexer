@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace MiniJavaCompiller.Lexer
 {
@@ -75,10 +76,14 @@ namespace MiniJavaCompiller.Lexer
 			{
 				return false;
 			}
-			
+			int commaCounter = 0;
 			foreach (char symbol in part)
 			{
-				if (!Char.IsNumber(symbol) && !IsSeporator(part.First()))
+				if(symbol == ',')
+				{
+					++commaCounter;
+				}
+				if (!Char.IsNumber(symbol) && !IsSeporator(part.First()) && commaCounter > 1)
 				{
 					return false;
 				}
@@ -100,6 +105,11 @@ namespace MiniJavaCompiller.Lexer
 		public static bool CheckComment(char symbol)
 		{
 			return symbol == '/';
+		}
+
+		public static bool IsStringLiteral(string tokenString)
+		{
+			return Regex.IsMatch(tokenString, "@^\"(?:[^\"]|\"\")*\"|\"(?:\\.|[^\\\"])*\"");
 		}
 
 		private static bool CheckLength(string part)

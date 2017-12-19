@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using MiniJavaCompiller.Lexer;
+using System.Text.RegularExpressions;
 
 namespace Compiler.LexicalAnalyzer
 {
@@ -10,6 +11,7 @@ namespace Compiler.LexicalAnalyzer
 		Keyword,
 		Number,
 		Operator,
+		String,
 		Eof,
 		Undefined,
 	}
@@ -65,6 +67,10 @@ namespace Compiler.LexicalAnalyzer
 
 				return ActualToken( TokenType.Identifier, _substringPart );
 			}
+			if(Matcher.IsStringLiteral(_substringPart))
+			{
+				return ActualToken(TokenType.String, _substringPart);
+			}
 			if ( Matcher.IsNumber( _substringPart ) )
 			{
 				return ActualToken( TokenType.Number, _substringPart );
@@ -115,8 +121,22 @@ namespace Compiler.LexicalAnalyzer
 	        get
 	        {
 	            int jumpTospaceOrEnd = 0;
-	            foreach (char symbol in _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos))
-	            {
+				string subString = _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos);
+				if (subString.Length == 0)
+				{
+					return _bufferText.Substring(_caretPos, 1);
+				}
+
+				if (IsQuotationMark(subString[0]))
+				{
+					var comment = CalculateStringLiteralLength();
+					jumpTospaceOrEnd += comment.Item1;
+
+					return comment.Item2;
+				}
+
+				foreach (char symbol in subString)
+				{
 	                if (!Char.IsSeparator(symbol) && !Matcher.SeporatorsList.Contains(symbol))
 	                {
 	                    ++jumpTospaceOrEnd;
@@ -125,20 +145,32 @@ namespace Compiler.LexicalAnalyzer
 	                {
 	                    return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
 	                }
-
 	            }
 
 	            return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
 	        }
 	    }
 
-        private void SkipWhitespaces()
+		private Tuple<int, string> CalculateStringLiteralLength()
+		{
+			string match = Regex.Match(_bufferText, "@^\"(?:[^\"]|\"\")*\"|\"(?:\\.|[^\\\"])*\"").ToString();
+
+			return new Tuple<int, string>(match.Length, match);
+		}
+
+		private bool IsQuotationMark(char symbol)
+		{
+			return symbol == '\"';
+		}
+
+		private void SkipWhitespaces()
 		{
 			while (!IsEof && !IsEoln)
 			{
-				if (Char.IsWhiteSpace(_bufferText[_caretPos]) 
+				if ((Char.IsWhiteSpace(_bufferText[_caretPos]) 
                     || Char.IsSeparator(_bufferText[_caretPos])
-                    || Matcher.CheckComment(_bufferText[_caretPos]))
+                    || Matcher.CheckComment(_bufferText[_caretPos])) 
+					&& !IsQuotationMark(_bufferText[_caretPos]))
 				{
 					++_caretPos;
 					continue;

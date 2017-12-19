@@ -12,3 +12,10 @@ M:\WorkSapace\Lexer\Lexer\bin\Debug\Compiller.exe
 M:\WorkSapace\Lexer\Lexer\bin\Debug\Compiller.pdb
 M:\WorkSapace\Lexer\Lexer\obj\Debug\Compiller.exe
 M:\WorkSapace\Lexer\Lexer\obj\Debug\Compiller.pdb
+D:\WorkSpace\MyLexer\Lexer\bin\Debug\Compiller.exe.config
+D:\WorkSpace\MyLexer\Lexer\bin\Debug\Compiller.exe
+D:\WorkSpace\MyLexer\Lexer\bin\Debug\Compiller.pdb
+D:\WorkSpace\MyLexer\Lexer\obj\Debug\Compiller.csprojResolveAssemblyReference.cache
+D:\WorkSpace\MyLexer\Lexer\obj\Debug\Compiller.csproj.CoreCompileInputs.cache
+D:\WorkSpace\MyLexer\Lexer\obj\Debug\Compiller.exe
+D:\WorkSpace\MyLexer\Lexer\obj\Debug\Compiller.pdb
