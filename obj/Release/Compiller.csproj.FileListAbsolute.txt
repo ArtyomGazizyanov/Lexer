@@ -4,3 +4,10 @@ D:\WorkSpace\Lexer\MiniJavaCompiller\bin\Release\MiniJavaCompiller.pdb
 D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Release\Compiller.csproj.CoreCompileInputs.cache
 D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Release\MiniJavaCompiller.exe
 D:\WorkSpace\Lexer\MiniJavaCompiller\obj\Release\MiniJavaCompiller.pdb
+M:\WorkSapace\Lexer\Lexer\bin\Release\Compiller.exe.config
+M:\WorkSapace\Lexer\Lexer\bin\Release\Compiller.exe
+M:\WorkSapace\Lexer\Lexer\bin\Release\Compiller.pdb
+M:\WorkSapace\Lexer\Lexer\obj\Release\Compiller.csprojResolveAssemblyReference.cache
+M:\WorkSapace\Lexer\Lexer\obj\Release\Compiller.csproj.CoreCompileInputs.cache
+M:\WorkSapace\Lexer\Lexer\obj\Release\Compiller.exe
+M:\WorkSapace\Lexer\Lexer\obj\Release\Compiller.pdb

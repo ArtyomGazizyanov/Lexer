@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
-using MiniJavaCompiller.Lexer;
-using System.Text.RegularExpressions;
+using System.IO; 
 
 namespace Compiler.LexicalAnalyzer
 {
@@ -11,7 +9,7 @@ namespace Compiler.LexicalAnalyzer
 		Keyword,
 		Number,
 		Operator,
-		String,
+		StringLiteral,
 		Eof,
 		Undefined,
 	}
@@ -57,7 +55,9 @@ namespace Compiler.LexicalAnalyzer
 			}
 
 			SkipWhitespaces();
+
 			_substringPart = GetSubstringFromText;
+
 			if ( Matcher.IsIdentifier( _substringPart ) )
 			{
 				if ( Matcher.IsKeyword( _substringPart ) )
@@ -69,15 +69,15 @@ namespace Compiler.LexicalAnalyzer
 			}
 			if(Matcher.IsStringLiteral(_substringPart))
 			{
-				return ActualToken(TokenType.String, _substringPart);
-			}
-			if ( Matcher.IsNumber( _substringPart ) )
+				return ActualToken(TokenType.StringLiteral, _substringPart);
+		    }
+		    if (Matcher.IsOperator(_substringPart))
+		    {
+		        return ActualToken(TokenType.Operator, _substringPart);
+		    }
+            if ( Matcher.IsNumber( _substringPart ) )
 			{
 				return ActualToken( TokenType.Number, _substringPart );
-			}
-			if ( Matcher.IsOperator( _substringPart ) )
-			{
-				return ActualToken( TokenType.Operator, _substringPart );
 			}
 
 			return ActualToken( TokenType.Undefined, _bufferText[ _caretPos - 1 ].ToString() );
@@ -120,7 +120,7 @@ namespace Compiler.LexicalAnalyzer
 	    {
 	        get
 	        {
-	            int jumpTospaceOrEnd = 0;
+	            int jumpFor = 0;
 				string subString = _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos);
 				if (subString.Length == 0)
 				{
@@ -130,32 +130,35 @@ namespace Compiler.LexicalAnalyzer
 				if (IsQuotationMark(subString[0]))
 				{
 					var comment = CalculateStringLiteralLength();
-					jumpTospaceOrEnd += comment.Item1;
 
 					return comment.Item2;
 				}
 
-				foreach (char symbol in subString)
+	            if (subString[0] == ',')
+	            {
+	                return _bufferText.Substring(_caretPos, 1);
+                }
+
+
+                foreach (char symbol in subString)
 				{
 	                if (!Char.IsSeparator(symbol) && !Matcher.SeporatorsList.Contains(symbol))
 	                {
-	                    ++jumpTospaceOrEnd;
+	                    ++jumpFor;
 	                }
 	                else
 	                {
-	                    return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
+	                    return jumpFor == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpFor);
 	                }
 	            }
 
-	            return jumpTospaceOrEnd == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpTospaceOrEnd);
+	            return jumpFor == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpFor);
 	        }
 	    }
 
 		private Tuple<int, string> CalculateStringLiteralLength()
 		{
-			string match = Regex.Match(_bufferText, "@^\"(?:[^\"]|\"\")*\"|\"(?:\\.|[^\\\"])*\"").ToString();
-
-			return new Tuple<int, string>(match.Length, match);
+		    return Matcher.CutStringLiteralLength(_bufferText);
 		}
 
 		private bool IsQuotationMark(char symbol)

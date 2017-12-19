@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MiniJavaCompiller.Lexer
+namespace Compiler.LexicalAnalyzer
 {
     class Matcher
 	{
-	    public static List<char> OperatorsList { get; } = new List<char> { '&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.' };
+	    public static List<char> OperatorsList { get; } = new List<char> { '&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.', ',' };
 	    public static List<char> SeporatorsList { get; } = OperatorsList;
 	    public static List<char> ValidIdentifierSymbols { get; } = new List<char> { '_', '-' };
 
@@ -112,7 +112,14 @@ namespace MiniJavaCompiller.Lexer
 			return Regex.IsMatch(tokenString, "@^\"(?:[^\"]|\"\")*\"|\"(?:\\.|[^\\\"])*\"");
 		}
 
-		private static bool CheckLength(string part)
+	    public static Tuple<int, string> CutStringLiteralLength(string text)
+	    {
+	        string match = Regex.Match(text, "@^\"(?:[^\"]|\"\")*\"|\"(?:\\.|[^\\\"])*\"").ToString();
+
+	        return new Tuple<int, string>(match.Length, match);
+	    }
+
+        private static bool CheckLength(string part)
 		{
 			return part.Length > 0;
 		}

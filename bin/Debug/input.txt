@@ -1,3 +1,1 @@
-sttring a = "aaa bbb ccc"
-int b = 1
-c = 3,5
+1,4
