@@ -7,11 +7,12 @@ namespace Compiler.LexicalAnalyzer
 {
     class Matcher
 	{
-	    public static List<char> OperatorsList { get; } = new List<char> { '&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.', ',' };
+	    public static List<char> OperatorsList { get; } = new List<char> { '&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.'};
 	    public static List<char> SeporatorsList { get; } = OperatorsList;
 	    public static List<char> ValidIdentifierSymbols { get; } = new List<char> { '_', '-' };
+		public static List<char> ExponentialAttribute { get; } = new List<char> { 'E', 'e' };
 
-	    public static bool IsSeporator( char symbol )
+		public static bool IsSeporator( char symbol )
 		{
 			return SeporatorsList.Contains( symbol );
 		}
@@ -44,6 +45,7 @@ namespace Compiler.LexicalAnalyzer
 
 		public static bool IsKeyword( string part )
 		{
+			part = part.ToLower();
 			if ( !CheckLength( part ) )
 			{
 				return false;
@@ -51,7 +53,7 @@ namespace Compiler.LexicalAnalyzer
 			return part == "static" || part == "main" || part == "extends"
 			         || part == "return" || part == "new" || part == "this"
 			         || part == "public" || part == "void" || part == "class"
-			         || part == "String" || part == "int" || part == "boolean"
+			         || part == "string" || part == "int" || part == "boolean"
 			         || part == "if" || part == "else" || part == "while"
 			         || part == "true" || part == "false" || part == "println";
 		}
@@ -79,11 +81,11 @@ namespace Compiler.LexicalAnalyzer
 			int commaCounter = 0;
 			foreach (char symbol in part)
 			{
-				if(symbol == ',')
+				if (symbol == ',')
 				{
 					++commaCounter;
 				}
-				if (!Char.IsNumber(symbol) && !IsSeporator(part.First()) && commaCounter > 1)
+				if (!Char.IsNumber(symbol) && !IsSeporator(part.First()) && commaCounter > 1 || Char.IsLetter(symbol) )					
 				{
 					return false;
 				}
@@ -91,7 +93,22 @@ namespace Compiler.LexicalAnalyzer
 			
 			return true;
 		}
-		
+
+		private static bool IsExponentialNumber(int index, string attribute)
+		{
+			if(attribute.Length < 2)
+			{
+				return false;
+			}
+
+			if(ExponentialAttribute.Contains(attribute[index]) && OperatorsList.Contains(attribute[index + 1]))
+			{
+				return IsNumber(attribute.Substring(1, attribute.Length));
+			}
+
+			return false;
+		}
+
 		public static bool IsComment(string part)
 		{
 		    if (part.Length > 1 && part.First() != '/' && part.First() + 1 != '/')

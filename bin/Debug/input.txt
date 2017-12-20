@@ -1,1 +1,6 @@
-1,4
+class
+13,23
+class Fuc() 
+{
+String miniString = "sssuuuupppeeerrr";
+}

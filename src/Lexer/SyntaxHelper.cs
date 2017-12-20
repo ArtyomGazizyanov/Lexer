@@ -9,12 +9,12 @@ namespace Compiler.SyntaxAnalyzer
 		{
 			_lexer = lexer;
 
-			Parse();
+			StartParse();
 		}
 
 		private readonly Lexer _lexer;
 
-		private void Parse()
+		private void StartParse()
 		{
 			while ( true )
 			{

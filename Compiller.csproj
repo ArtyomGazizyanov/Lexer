@@ -50,7 +50,7 @@
     <Compile Include="src\Lexer\Token.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Syntaxer\SyntaxHelper.cs" />
+    <Compile Include="src\Lexer\SyntaxHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

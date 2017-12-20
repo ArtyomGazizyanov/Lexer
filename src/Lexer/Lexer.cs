@@ -18,31 +18,18 @@ namespace Compiler.LexicalAnalyzer
 	{
 		public StreamReader Reader { get; }
 
-		public Lexer(string text)
-		{
-			_bufferText = text.ToLower();
-			_peek = null;
-
-			Peek();
-		}
-
 		public Lexer(StreamReader reader)
 		{
 			Reader = reader;
-			_bufferText = Reader.ReadLine()?.ToLower();
+			_bufferText = Reader.ReadLine();
 			_peek = null;
-
-			Peek();
 		}
 
 		public Token Read()
 		{
 			if ( _peek != null )
 			{
-				Token result = _peek;
-				_peek = null;
-
-				return result;
+				return GetAndResetPeak();
 			}
 
 			if ( IsEof )
@@ -55,32 +42,43 @@ namespace Compiler.LexicalAnalyzer
 			}
 
 			SkipWhitespaces();
+			
+			return GetToken(GetSubstringFromText);
+		}
 
-			_substringPart = GetSubstringFromText;
+		private Token GetAndResetPeak()
+		{
+			Token result = _peek;
+			_peek = null;
 
-			if ( Matcher.IsIdentifier( _substringPart ) )
+			return result;
+		}
+
+		private Token GetToken(string subString)
+		{
+			if (Matcher.IsIdentifier(subString))
 			{
-				if ( Matcher.IsKeyword( _substringPart ) )
+				if (Matcher.IsKeyword(subString))
 				{
-					return ActualToken( TokenType.Keyword, _substringPart );
+					return GetToken(TokenType.Keyword, subString);
 				}
 
-				return ActualToken( TokenType.Identifier, _substringPart );
+				return GetToken(TokenType.Identifier, subString);
 			}
-			if(Matcher.IsStringLiteral(_substringPart))
+			if (Matcher.IsStringLiteral(subString))
 			{
-				return ActualToken(TokenType.StringLiteral, _substringPart);
-		    }
-		    if (Matcher.IsOperator(_substringPart))
-		    {
-		        return ActualToken(TokenType.Operator, _substringPart);
-		    }
-            if ( Matcher.IsNumber( _substringPart ) )
+				return GetToken(TokenType.StringLiteral, subString);
+			}
+			if (Matcher.IsOperator(subString))
 			{
-				return ActualToken( TokenType.Number, _substringPart );
+				return GetToken(TokenType.Operator, subString);
+			}
+			if (Matcher.IsNumber(subString))
+			{
+				return GetToken(TokenType.Number, subString);
 			}
 
-			return ActualToken( TokenType.Undefined, _bufferText[ _caretPos - 1 ].ToString() );
+			return GetToken(TokenType.Undefined, subString);
 		}
 
 		public Token ReadStream()
@@ -110,11 +108,10 @@ namespace Compiler.LexicalAnalyzer
 		private int _caeretRow = 1;
 		private string _bufferText;
 		private Token _peek;
-	    private string _substringPart;
 
         private bool IsEof => Reader.EndOfStream && _bufferText.Length > 0 && IsEoln;
 
-		private bool IsEoln => _caretPos == _bufferText.Length;
+		private bool IsEoln => _caretPos == _bufferText.Length || _caretPos > _bufferText.Length ;
 
 	    private string GetSubstringFromText
 	    {
@@ -129,12 +126,11 @@ namespace Compiler.LexicalAnalyzer
 
 				if (IsQuotationMark(subString[0]))
 				{
-					var comment = CalculateStringLiteralLength();
-
-					return comment.Item2;
+					var stringLiteral = CalculateStringLiteralLength();
+					return stringLiteral.Item2;
 				}
 
-	            if (subString[0] == ',')
+				if (IsComma(subString[0]))
 	            {
 	                return _bufferText.Substring(_caretPos, 1);
                 }
@@ -156,6 +152,12 @@ namespace Compiler.LexicalAnalyzer
 	        }
 	    }
 
+		private string GetStringLiteral(char symbol)
+		{
+			var stringLiteral = CalculateStringLiteralLength();
+			return stringLiteral.Item2;			
+		}
+
 		private Tuple<int, string> CalculateStringLiteralLength()
 		{
 		    return Matcher.CutStringLiteralLength(_bufferText);
@@ -166,13 +168,17 @@ namespace Compiler.LexicalAnalyzer
 			return symbol == '\"';
 		}
 
-		private void SkipWhitespaces()
+		private bool IsComma(char symbol)
+		{
+			return symbol == ',';
+		}
+
+			private void SkipWhitespaces()
 		{
 			while (!IsEof && !IsEoln)
 			{
 				if ((Char.IsWhiteSpace(_bufferText[_caretPos]) 
-                    || Char.IsSeparator(_bufferText[_caretPos])
-                    || Matcher.CheckComment(_bufferText[_caretPos])) 
+                    || Char.IsSeparator(_bufferText[_caretPos])) 
 					&& !IsQuotationMark(_bufferText[_caretPos]))
 				{
 					++_caretPos;
@@ -183,7 +189,7 @@ namespace Compiler.LexicalAnalyzer
 			}
 		}
 
-		private Token ActualToken(TokenType type, string value)
+		private Token GetToken(TokenType type, string value)
 		{
 			UpdateCarretPos( value.Length );
 			return new Token(type, _caretPos - value.Length, _caeretRow, value);
