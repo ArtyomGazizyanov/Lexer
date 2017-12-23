@@ -1,6 +1,1 @@
-class
-13,23
-class Fuc() 
-{
-String miniString = "sssuuuupppeeerrr";
-}
+123asd

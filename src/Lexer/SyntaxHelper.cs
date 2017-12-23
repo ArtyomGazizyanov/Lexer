@@ -19,12 +19,12 @@ namespace Compiler.SyntaxAnalyzer
 			while ( true )
 			{
 				Token token = _lexer.ReadStream();
-			    if (token != null)
+			    if (token.Type != TokenType.Eoln)
 			    {
 			        Console.WriteLine(token.ToString());
                 }
 
-				if ( token != null && token.Type == TokenType.Eof )
+				if ( token.Type == TokenType.Eof )
 				{
 					break;
 				}

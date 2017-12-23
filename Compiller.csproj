@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Lexer\Lexer.cs" />
+    <Compile Include="src\Lexer\LexerRules.cs" />
     <Compile Include="src\Lexer\Matcher.cs" />
     <Compile Include="src\Lexer\Token.cs" />
     <Compile Include="src\Program.cs" />
