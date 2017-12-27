@@ -280,6 +280,7 @@ namespace Compiler.LexicalAnalyzer
 					var stringLiteral = CalculateStringLiteralLength();
 					return stringLiteral.Item2;
 				}
+
 				if (Matcher.IsReservedSymbol(subString[0]))
 	            {
 	                return _bufferText.Substring(_caretPos, 1);
@@ -324,7 +325,7 @@ namespace Compiler.LexicalAnalyzer
 
 		private Tuple<int, string> CalculateStringLiteralLength()
 		{
-		    return Matcher.CutStringLiteralLength(_bufferText);
+		    return Matcher.CutStringLiteralLength(_bufferText.Substring(_caretPos));
 		}
 		private Tuple<int, string> CalculateCharLiteral()
 		{
