@@ -1,1 +1,1 @@
-Token:  Text=""aa"" Type="StringLiteral" First="0" Last="3" Row = "1"
+Token:  Text="" Type="Undefined" First="0" Last="0" Row = "1"

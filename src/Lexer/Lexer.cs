@@ -262,7 +262,6 @@ namespace Compiler.LexicalAnalyzer
 	    {
 	        get
 	        {
-	            int jumpFor = 0;
 				string subString = _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos);
 				if (subString.Length == 0)
 				{
@@ -278,6 +277,15 @@ namespace Compiler.LexicalAnalyzer
 				if (IsStringMark(subString[0]))
 				{
 					var stringLiteral = CalculateStringLiteralLength();
+					if ( stringLiteral.Item1 == 0 )
+					{
+						if ( _caretPos + 1 <= _bufferText.Length )
+						{
+							string unfinishedStringLiteral = _bufferText.Substring(_caretPos);
+							++_caretPos;
+							return unfinishedStringLiteral;
+						}
+					}
 					return stringLiteral.Item2;
 				}
 
