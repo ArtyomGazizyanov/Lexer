@@ -65,7 +65,35 @@ namespace Compiler.LexicalAnalyzer
 			return GetToken(GetSubstringFromText);
 		}
 
-		private Token GetAndResetPeak()
+	    public Token ReadStream()
+	    {
+	        if (IsEof)
+	        {
+	            return new Token(TokenType.Eof, _caretPos, _caeretRow, String.Empty);
+	        }
+	        SkipWhitespaces();
+	        if (IsEoln)
+	        {
+	            ++_caeretRow;
+	            if (!Reader.EndOfStream)
+	            {
+	                _bufferText = Reader.ReadLine();
+	                _caretPos = 0;
+	                _peek = null;
+
+	                Peek();
+	            }
+	        }
+
+	        return Read();
+	    }
+
+	    public Token Peek()
+	    {
+	        return _peek ?? (_peek = Read());
+	    }
+
+        private Token GetAndResetPeak()
 		{
 			Token result = _peek;
 			_peek = null;
@@ -138,7 +166,7 @@ namespace Compiler.LexicalAnalyzer
 			{
 				return false;
 			}
-			return Char.IsNumber( str.FirstOrDefault() ) || str.FirstOrDefault() == '+' || str.FirstOrDefault() == '-';
+			return Char.IsNumber( str.FirstOrDefault() ) || str.FirstOrDefault() == LexerRules.PlusOperator || str.FirstOrDefault() == LexerRules.MinusOperator;
 		}
 		private Token GetWordToken(string subString)
 		{
@@ -202,50 +230,28 @@ namespace Compiler.LexicalAnalyzer
 			if (HasWordAttribute(subString))
 			{
 				return GetWordToken(subString);
-			}
-			if ( !IsStringMoreOneSymbol( subString ) )
-			{
-				return  GetSymbolToken( subString );
-			}
-			if ( HasQuotionMark( subString ) )
+		    }
+		    if (!IsStringMoreOneSymbol(subString))
+		    {
+		        Token symbolToken = GetSymbolToken(subString);
+
+                if (symbolToken.Type != TokenType.Undefined)
+                {
+                    return symbolToken;
+                }
+		    }
+            if (HasNumberAttribute(subString))
+		    {
+		        return GetNumberToken(subString);
+		    }
+            if ( HasQuotionMark( subString ) )
 			{
 				return GetLiteral( subString );
 			}
 
-			if ( HasNumberAttribute( subString ) )
-			{
-				return GetNumberToken(subString);
-			}
+			
 
 			return GetToken(TokenType.Undefined, subString);
-		}
-
-		public Token ReadStream()
-		{
-			if (IsEof)
-			{
-				return new Token(TokenType.Eof, _caretPos, _caeretRow, String.Empty);
-			}
-			SkipWhitespaces();
-			if ( IsEoln )
-			{
-				++_caeretRow;
-				if ( !Reader.EndOfStream )
-				{
-					_bufferText = Reader.ReadLine();
-					_caretPos = 0;
-					_peek = null;
-
-					Peek();
-				}
-			}
-			
-			return Read();
-		}
-		
-		public Token Peek()
-		{
-			return _peek ?? ( _peek = Read() );
 		}
 
 		private int _caretPos;
@@ -265,28 +271,19 @@ namespace Compiler.LexicalAnalyzer
 				string subString = _bufferText.Substring(_caretPos, _bufferText.Length - _caretPos);
 				if (subString.Length == 0)
 				{
-					return String.Empty; //_bufferText.Substring(_caretPos, 1);
+					return String.Empty;
 				}
 
 		        if (IsCharMark(subString[0]))
 		        {
-			        var stringLiteral = CalculateCharLiteral();
-			        return stringLiteral.Item2;
+		            var charLiteral = CalculateCharLiteral();
+                    return GetSubStringLiteral(subString, charLiteral.Item2);
 		        }
 
 				if (IsStringMark(subString[0]))
 				{
-					var stringLiteral = CalculateStringLiteralLength();
-					if ( stringLiteral.Item1 == 0 )
-					{
-						if ( _caretPos + 1 <= _bufferText.Length )
-						{
-							string unfinishedStringLiteral = _bufferText.Substring(_caretPos);
-							++_caretPos;
-							return unfinishedStringLiteral;
-						}
-					}
-					return stringLiteral.Item2;
+				    var stringLiteral = CalculateStringLiteralLength();
+                    return GetSubStringLiteral(subString, stringLiteral.Item2);
 				}
 
 				if (Matcher.IsReservedSymbol(subString[0]))
@@ -304,7 +301,20 @@ namespace Compiler.LexicalAnalyzer
 	        }
 	    }
 
-		private string GetSubString(string subString)
+        private string GetSubStringLiteral(string substring, string cutStringResult)
+	    { 
+	        if (cutStringResult.Length == 0)
+	        {
+	            if (_caretPos + 1 <= _bufferText.Length)
+	            {
+	                ++_caretPos;
+	                return substring;
+	            }
+	        }
+	        return cutStringResult;
+        }
+
+        private string GetSubString(string subString)
 		{
 			int jumpFor = 0;
 			bool suspicionOfNumber = Char.IsNumber(subString.First());
@@ -312,7 +322,6 @@ namespace Compiler.LexicalAnalyzer
 			{
 
 				if ((!Matcher.IsReservedSymbol(symbol) || (suspicionOfNumber && Matcher.IsNumberDelimiter(symbol)))
-				    //&& Matcher.IsLastSymbolInString(symbol, subString)
 				    && Matcher.IsValidIdentifierNameLength(jumpFor))
 				{
 					++jumpFor;

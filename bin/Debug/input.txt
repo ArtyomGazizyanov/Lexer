@@ -1,1 +1,70 @@
-"                         		asdsadfsdfjhdsbfksdjnl
+'asdasdasdsdfsdf
+"       asdasdas
+'zxc'
+1
+0.12
+12.12.12
+-1
+-0.12
+123x12 /* максимальня система счисления 19 */
+0x12
++1.9e+2
++1.9e-2
+=
+String
+Int
+someIdentifier
+someIdentifier123
+"adasdasd123123dsdfsdfgh!@#$%^&*(<>?."
+'a'
+//string comment
+/* many
+   string 
+   comment */
+If while do 
+
+/ * - + ! @ # $ % ^ & * ( ) { } [ ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

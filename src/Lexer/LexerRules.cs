@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Compiler.LexicalAnalyzer
 {
 	public static class LexerRules
 	{
 		public static readonly int MaxIdentifirenNameLength = 1000;
-		public static readonly HashSet<char> Operators = new HashSet<char> { '&', '<', '>', '!', '+', '-', '*', '/' };
+		public static readonly HashSet<char> Operators = new HashSet<char> { '&', '<', '>', '!', '+', '-', '*', '/', '^' };
 		public static readonly char EqualityOperator = '=';
+		public static readonly char PlusOperator = '+';
+		public static readonly char MinusOperator = '-';
 		public static readonly char NumberDelimiter = '.';
 		public static readonly char OpenRoundBracket = '(';
 		public static readonly char CloseRoundBracket = ')';
@@ -63,6 +61,7 @@ namespace Compiler.LexicalAnalyzer
 			"int",
 			"boolean",
 			"if",
+            "do",
 			"else",
 			"while",
 			"true",

@@ -77,7 +77,7 @@ namespace Compiler.LexicalAnalyzer
 				return false;
 			}
 
-			if (!Char.IsNumber(part.First()) && IsSeporator(part.First()) || part.First() == '0')
+			if (!Char.IsNumber(part.First()) && IsSeporator(part.First()) || (part.Length > 1 && part.First() == '0'))
 			{
 				return false;
 			}
@@ -194,7 +194,7 @@ namespace Compiler.LexicalAnalyzer
 		}
 		public static bool HasNumberSystem(string tokenString)
 		{
-			return Regex.IsMatch(tokenString, "^[1-9]([0-9]*)?x([0-1][0-9]|[1-9])");
+			return Regex.IsMatch(tokenString, "^(0|[1-9]([0-9]*)?)x([0-1][0-9]|[1-9])");
 		}
 		public static bool IsExponentialNumber(string tokenString)
 		{
@@ -222,21 +222,19 @@ namespace Compiler.LexicalAnalyzer
 			int jumpTo = 0;
 			if ( String.IsNullOrEmpty( text ) )
 			{
-				if ( text.First() == LexerRules.QuotionMark )
+				if ( (text ?? throw new ArgumentNullException(nameof(text))).First() == LexerRules.QuotionMark )
 				{
-					bool EndQuotionMarkFound = false;
-					bool SuspicionOfQuotation = false;
-					while ( jumpTo < text.Length - 1 && !EndQuotionMarkFound)
+					bool endQuotionMarkFound = false;
+				    while ( jumpTo < text.Length - 1 && !endQuotionMarkFound)
 					{
 						jumpTo++;
 						if (text[jumpTo] == LexerRules.ReverseSlash)
 						{
-							SuspicionOfQuotation = true;
 						}
 
 						if ( text[ jumpTo ] == LexerRules.QuotionMark )
 						{
-							EndQuotionMarkFound = true;
+							endQuotionMarkFound = true;
 						}
 					}
 				}
