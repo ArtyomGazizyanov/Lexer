@@ -3,33 +3,32 @@ using System;
 
 namespace Compiler.SyntaxAnalyzer
 {
-	public class SyntaxHelper
-	{
-		public SyntaxHelper(Lexer lexer)
-		{
-			_lexer = lexer;
+    public class SyntaxHelper
+    {
+        public SyntaxHelper(Lexer lexer)
+        {
+            _lexer = lexer;
 
-			StartParse();
-		}
+            StartParse();
+        }
 
-		private readonly Lexer _lexer;
+        private readonly Lexer _lexer;
 
-		private void StartParse()
-		{
-			while ( true )
-			{
-				Token token = _lexer.ReadStream();
-			    if (token.Type != TokenType.Eoln)
-			    {
-			        Console.WriteLine(token.ToString());
+        private void StartParse()
+        {
+            while (true)
+            {
+                Token token = _lexer.ReadStream();
+                if (token.Type != TokenType.Eoln)
+                {
+                    Console.WriteLine(token.ToString());
                 }
 
-				if ( token.Type == TokenType.Eof )
-				{
-					break;
-				}
-			}
-		}
-
-	}
+                if (token.Type == TokenType.Eof)
+                {
+                    break;
+                }
+            }
+        }
+    }
 }

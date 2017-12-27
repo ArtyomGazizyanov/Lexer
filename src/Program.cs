@@ -5,33 +5,33 @@ using Compiler.SyntaxAnalyzer;
 
 namespace Compiler
 {
-	class Program
-	{
-		public static uint MIN_ARGS_COUNT = 1;
+    class Program
+    {
+        public static uint MIN_ARGS_COUNT = 1;
 
-		public static int Main(string[] args)
-		{
-			try
-			{
-				if (args.Length < MIN_ARGS_COUNT)
-				{
-					throw new ArgumentException("Invalid arguments count.");
-				}
+        public static int Main(string[] args)
+        {
+            try
+            {
+                if (args.Length < MIN_ARGS_COUNT)
+                {
+                    throw new ArgumentException("Invalid arguments count.");
+                }
 
-				StreamReader reader = new StreamReader(args[0]);
-				Lexer lexer = new Lexer(reader);
+                StreamReader reader = new StreamReader(args[0]);
+                Lexer lexer = new Lexer(reader);
 
-			    SyntaxHelper syntaxer = new SyntaxHelper(lexer);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-				Console.WriteLine(ex.StackTrace);
+                SyntaxHelper syntaxer = new SyntaxHelper(lexer);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
 
-				return 1;
-			}
+                return 1;
+            }
 
-			return 0;
-		}
-	}
+            return 0;
+        }
+    }
 }
