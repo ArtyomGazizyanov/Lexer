@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Compiler.LexicalAnalyzer
+namespace Compiller.Lexer
 {
     public enum TokenType
     {
@@ -106,6 +106,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return str.Length > 1;
         }
 
@@ -115,7 +116,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return GetToken(TokenType.Operator, subString);
             }
-            if (Matcher.IsSeporator(subString))
+            if (Matcher.IsSeparator(subString))
             {
                 return GetToken(TokenType.Separator, subString);
             }
@@ -157,6 +158,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return Char.IsLetter(str.FirstOrDefault());
         }
 
@@ -166,6 +168,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return Char.IsNumber(str.FirstOrDefault()) || str.FirstOrDefault() == LexerRules.PlusOperator || str.FirstOrDefault() == LexerRules.MinusOperator;
         }
 
@@ -215,6 +218,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return GetToken(TokenType.CharLiteral, subString);
             }
+
             return GetToken(TokenType.Undefined, subString);
         }
 
@@ -250,7 +254,6 @@ namespace Compiler.LexicalAnalyzer
             {
                 return GetLiteral(subString);
             }
-
 
             return GetToken(TokenType.Undefined, subString);
         }
@@ -311,6 +314,7 @@ namespace Compiler.LexicalAnalyzer
                     return substring;
                 }
             }
+
             return cutStringResult;
         }
 
@@ -330,13 +334,8 @@ namespace Compiler.LexicalAnalyzer
                     return jumpFor == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpFor);
                 }
             }
-            return jumpFor == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpFor);
-        }
 
-        private string GetStringLiteral(char symbol)
-        {
-            var stringLiteral = CalculateStringLiteralLength();
-            return stringLiteral.Item2;
+            return jumpFor == 0 ? _bufferText.Substring(_caretPos, 1) : _bufferText.Substring(_caretPos, jumpFor);
         }
 
         private Tuple<int, string> CalculateStringLiteralLength()
@@ -423,6 +422,7 @@ namespace Compiler.LexicalAnalyzer
         private Token GetToken(TokenType type, string value)
         {
             UpdateCarretPos(value.Length);
+
             return new Token(type, _caretPos - value.Length, _caeretRow, value);
         }
 

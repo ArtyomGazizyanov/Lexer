@@ -1,7 +1,6 @@
-﻿using Compiler.LexicalAnalyzer;
-using System;
+﻿using System;
 
-namespace Compiler.SyntaxAnalyzer
+namespace Compiller.Lexer
 {
     public class SyntaxHelper
     {

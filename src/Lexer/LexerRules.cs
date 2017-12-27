@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Compiler.LexicalAnalyzer
+namespace Compiller.Lexer
 {
     public static class LexerRules
     {
@@ -19,9 +19,11 @@ namespace Compiler.LexicalAnalyzer
         public static readonly char QuotionMark = '"';
         public static readonly char CharMark = '\'';
         public static readonly char ReverseSlash = '\\';
-        public static HashSet<char> Seporators = new HashSet<char> {';', '.', ','};
+        public static HashSet<char> Separators = new HashSet<char> {';', '.', ','};
 
         public static HashSet<char> ExponentialAttribute = new HashSet<char> {'E', 'e'};
+
+        public static List<char> ValidIdentifierSymbols = new List<char> { '_', '-' };
 
         public static readonly string ComentStart = "/*";
         public static readonly string ComentEnd = "*/";
@@ -32,7 +34,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 HashSet<char> validSymbols = new HashSet<char>();
                 validSymbols.UnionWith(Operators);
-                validSymbols.UnionWith(Seporators);
+                validSymbols.UnionWith(Separators);
                 validSymbols.Add(EqualityOperator);
                 validSymbols.Add(NumberDelimiter);
                 validSymbols.Add(OpenCurlyBracket);

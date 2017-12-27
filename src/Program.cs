@@ -1,25 +1,24 @@
 ﻿using System;
 using System.IO;
-using Compiler.LexicalAnalyzer;
-using Compiler.SyntaxAnalyzer;
+using Compiller.Lexer;
 
-namespace Compiler
+namespace Compiller
 {
     class Program
     {
-        public static uint MIN_ARGS_COUNT = 1;
+        public static uint MinArgsCount = 1;
 
         public static int Main(string[] args)
         {
             try
             {
-                if (args.Length < MIN_ARGS_COUNT)
+                if (args.Length < MinArgsCount)
                 {
                     throw new ArgumentException("Invalid arguments count.");
                 }
 
                 StreamReader reader = new StreamReader(args[0]);
-                Lexer lexer = new Lexer(reader);
+                Lexer.Lexer lexer = new Lexer.Lexer(reader);
 
                 SyntaxHelper syntaxer = new SyntaxHelper(lexer);
             }

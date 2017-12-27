@@ -1,4 +1,4 @@
-﻿namespace Compiler.LexicalAnalyzer
+﻿namespace Compiller.Lexer
 {
     public sealed class Token
     {

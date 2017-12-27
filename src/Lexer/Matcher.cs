@@ -1,34 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Compiler.LexicalAnalyzer
+namespace Compiller.Lexer
 {
     public static class Matcher
     {
-        public static List<char> OperatorsList { get; } = new List<char> {'&', '<', '>', '=', '!', '=', '+', '-', '*', '/', '{', '}', '(', ')', '[', ']', ';', '.'};
-        public static List<char> SeporatorsList { get; } = OperatorsList;
-        public static List<char> ValidIdentifierSymbols { get; } = new List<char> {'_', '-'};
-        public static List<char> ExponentialAttribute { get; } = new List<char> {'E', 'e'};
-
         public static bool IsSeporator(char symbol)
         {
-            return LexerRules.Seporators.Contains(symbol);
+            return LexerRules.Separators.Contains(symbol);
         }
 
-        public static bool IsSeporator(string str)
+        public static bool IsSeparator(string str)
         {
             if (!String.IsNullOrEmpty(str) && str.Length == 1)
             {
-                return LexerRules.Seporators.Contains(str.First());
+                return LexerRules.Separators.Contains(str.First());
             }
+
             return false;
         }
 
         public static bool IsValidIdentifierSymbol(char symbol)
         {
-            return ValidIdentifierSymbols.Contains(symbol);
+            return LexerRules.ValidIdentifierSymbols.Contains(symbol);
         }
 
         public static bool IsIdentifier(string part)
@@ -50,6 +45,7 @@ namespace Compiler.LexicalAnalyzer
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -60,6 +56,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return LexerRules.Keywords.Contains(part);
         }
 
@@ -69,6 +66,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return LexerRules.Operators.Contains(part.First());
         }
 
@@ -133,21 +131,6 @@ namespace Compiler.LexicalAnalyzer
             return LexerRules.ReservedSymbols.Contains(symbol) || Char.IsSeparator(symbol);
         }
 
-        private static bool IsExponentialNumber(int index, string attribute)
-        {
-            if (attribute.Length < 2)
-            {
-                return false;
-            }
-
-            if (LexerRules.ExponentialAttribute.Contains(attribute[index]) && LexerRules.Operators.Contains(attribute[index + 1]))
-            {
-                return IsNumber(attribute.Substring(1, attribute.Length));
-            }
-
-            return false;
-        }
-
         public static bool IsValidIdentifierNameLength(int identifierLength)
         {
             return identifierLength < LexerRules.MaxIdentifirenNameLength;
@@ -159,22 +142,8 @@ namespace Compiler.LexicalAnalyzer
             {
                 return str.First() == LexerRules.EqualityOperator;
             }
+
             return false;
-        }
-
-        public static bool IsLastSymbolInString(char symbol, string subString)
-        {
-            return subString.IndexOf(symbol) != subString.Length - 1;
-        }
-
-        public static bool IsComment(string part)
-        {
-            if (part.Length > 1 && part.First() != '/' && part.First() + 1 != '/')
-            {
-                return false;
-            }
-
-            return true;
         }
 
         public static bool CheckCommentBegining(string symbol)
@@ -183,6 +152,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return symbol.Substring(0, 2) == "/*";
             }
+
             return false;
         }
 
@@ -225,33 +195,6 @@ namespace Compiler.LexicalAnalyzer
             return new Tuple<int, string>(match.Length, match);
         }
 
-        public static Tuple<int, string> CutStringLiteralLengthNew(string text)
-        {
-            int jumpTo = 0;
-            if (String.IsNullOrEmpty(text))
-            {
-                if ((text ?? throw new ArgumentNullException(nameof(text))).First() == LexerRules.QuotionMark)
-                {
-                    bool endQuotionMarkFound = false;
-                    while (jumpTo < text.Length - 1 && !endQuotionMarkFound)
-                    {
-                        jumpTo++;
-                        if (text[jumpTo] == LexerRules.ReverseSlash)
-                        {
-                        }
-
-                        if (text[jumpTo] == LexerRules.QuotionMark)
-                        {
-                            endQuotionMarkFound = true;
-                        }
-                    }
-                }
-            }
-            string match = Regex.Match(text, "@^\"(?:[^\"]|\"\")*\"|\"(?:\\.|[^\\\"])*\"").ToString();
-
-            return new Tuple<int, string>(match.Length, match);
-        }
-
         public static bool IsNumberDelimiter(char symbol)
         {
             return symbol == LexerRules.NumberDelimiter;
@@ -259,39 +202,22 @@ namespace Compiler.LexicalAnalyzer
 
         public static bool IsOpenRoundBracket(string str)
         {
-            if (String.IsNullOrEmpty(str))
-            {
-                return false;
-            }
-            return LexerRules.OpenRoundBracket == str.First();
+            return String.IsNullOrEmpty(str) && LexerRules.OpenRoundBracket == str.First();
         }
 
         public static bool IsCloseRoundBracket(string str)
         {
-            if (String.IsNullOrEmpty(str))
-            {
-                return false;
-            }
-            return LexerRules.CloseRoundBracket == str.First();
+            return String.IsNullOrEmpty(str) && LexerRules.CloseRoundBracket == str.First();
         }
 
         public static bool IsOpenCurlyBracket(string str)
         {
-            if (String.IsNullOrEmpty(str))
-            {
-                return false;
-            }
-            return LexerRules.OpenCurlyBracket == str.First();
+            return String.IsNullOrEmpty(str) && LexerRules.OpenCurlyBracket == str.First();
         }
 
         public static bool IsCloseCurlyBracket(string str)
         {
-            if (String.IsNullOrEmpty(str))
-            {
-                return false;
-            }
-            return LexerRules.CloseCurlyBracket == str.First();
-            ;
+            return String.IsNullOrEmpty(str) && LexerRules.CloseCurlyBracket == str.First();
         }
 
         public static bool IsOpenSquareBrackets(string str)
@@ -300,6 +226,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return LexerRules.OpenSquareBrackets == str.First();
         }
 
@@ -309,6 +236,7 @@ namespace Compiler.LexicalAnalyzer
             {
                 return false;
             }
+
             return LexerRules.CloseSquareBrackets == str.First();
         }
 
